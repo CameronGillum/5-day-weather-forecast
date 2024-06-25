@@ -76,7 +76,7 @@ function displayForecast(data) {
     let forecastItems = '';
 
     // Filter the data to get the weather at noon for each of the next 5 days
-    const forecastAtNoon = data.list.filter(forecast => new Date(forecast.dt * 1000).getHours() === 12);
+    const forecastAtNoon = data.list.filter(forecast => forecast.dt_txt.includes("12:00:00"));
     console.log('Filtered forecast data at noon:', forecastAtNoon);
 
     // Take only the first 5 entries
