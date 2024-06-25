@@ -14,27 +14,42 @@ function searchCity() {
 }
 
 function fetchWeatherData(city) {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
-        .then(response => response.json())
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => displayCurrentWeather(data))
         .catch(error => console.error('Error fetching current weather:', error));
     
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
-        .then(response => response.json())
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => displayForecast(data))
         .catch(error => console.error('Error fetching forecast:', error));
 }
 
 function displayCurrentWeather(data) {
+    if (!data || !data.weather || !data.weather[0]) {
+        console.error('Invalid data structure for current weather:', data);
+        return;
+    }
+
     const currentWeatherInfo = document.getElementById('current-weather-info');
     const weatherItem = `
         <div class="weather-item">
             <div>
                 <p>Date: ${new Date(data.dt * 1000).toLocaleDateString()}</p>
                 <img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="${data.weather[0].description}">
-                <p>Temperature: ${data.main.temp} °C</p>
+                <p>Temperature: ${data.main.temp} °F</p>
                 <p>Humidity: ${data.main.humidity} %</p>
-                <p>Wind Speed: ${data.wind.speed} m/s</p>
+                <p>Wind Speed: ${data.wind.speed} mph</p>
             </div>
         </div>
     `;
@@ -42,6 +57,11 @@ function displayCurrentWeather(data) {
 }
 
 function displayForecast(data) {
+    if (!data || !data.list) {
+        console.error('Invalid data structure for forecast:', data);
+        return;
+    }
+
     const forecastInfo = document.getElementById('forecast-info');
     let forecastItems = '';
 
@@ -52,9 +72,9 @@ function displayForecast(data) {
                     <div>
                         <p>Date: ${new Date(forecast.dt * 1000).toLocaleDateString()}</p>
                         <img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" alt="${forecast.weather[0].description}">
-                        <p>Temperature: ${forecast.main.temp} °C</p>
+                        <p>Temperature: ${forecast.main.temp} °F</p>
                         <p>Humidity: ${forecast.main.humidity} %</p>
-                        <p>Wind Speed: ${forecast.wind.speed} m/s</p>
+                        <p>Wind Speed: ${forecast.wind.speed} mph</p>
                     </div>
                 </div>
             `;
