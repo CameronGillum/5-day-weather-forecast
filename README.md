@@ -23,3 +23,7 @@ https://github.com/CameronGillum
 ## License
 
 N/A
+
+## Screenshot
+
+![image](https://github.com/CameronGillum/5-day-weather-forecast/assets/170665036/ae67f2d6-1c5e-405f-b1d7-051cf7434b95)
