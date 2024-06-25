@@ -85,8 +85,8 @@ function displayForecast(data) {
 
     nextFiveDaysForecast.forEach(forecast => {
         const forecastItem = `
-            <div class="weather-item">
-                <div>
+            <div class="weather-item card">
+                <div class="card-body">
                     <p>Date: ${new Date(forecast.dt * 1000).toLocaleDateString()}</p>
                     <img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" alt="${forecast.weather[0].description}">
                     <p>Temperature: ${forecast.main.temp} °F</p>
@@ -114,6 +114,7 @@ function loadSearchHistory() {
     historyList.innerHTML = '';
     cityHistory.forEach(city => {
         const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
         listItem.textContent = city;
         listItem.onclick = () => fetchWeatherData(city);
         historyList.appendChild(listItem);

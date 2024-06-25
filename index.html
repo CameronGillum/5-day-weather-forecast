@@ -4,28 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Weather Forecast</h1>
-        <div class="search">
-            <input type="text" id="city-input" placeholder="Enter city name">
-            <button onclick="searchCity()">Search</button>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Search City</h2>
+                <input type="text" id="city-input" class="form-control" placeholder="Enter city name">
+                <button onclick="searchCity()" class="btn btn-primary mt-2">Search</button>
+                <h2 class="mt-4">Search History</h2>
+                <ul id="history-list" class="list-group">
+                    <!-- History items will be injected here -->
+                </ul>
+            </div>
+            <div class="col-md-8">
+                <h2>Current Weather</h2>
+                <div id="current-weather-info" class="card p-3">
+                    <!-- Current weather info will be injected here -->
+                </div>
+            </div>
         </div>
-        <div id="search-history">
-            <h2>Search History</h2>
-            <ul id="history-list"></ul>
-        </div>
-        <div id="current-weather">
-            <h2>Current Weather</h2>
-            <div class="weather-info" id="current-weather-info"></div>
-        </div>
-        <div id="forecast">
-            <h2>5-Day Forecast</h2>
-            <div class="weather-info" id="forecast-info"></div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2>5-Day Forecast</h2>
+                <div id="forecast-info" class="d-flex flex-wrap flex-row flex-column-sm justify-content-between">
+                    <!-- Forecast info will be injected here -->
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>
