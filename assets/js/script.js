@@ -14,6 +14,8 @@ function searchCity() {
 }
 
 function fetchWeatherData(city) {
+    console.log(`Fetching weather data for ${city}`);
+    
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`)
         .then(response => {
             if (!response.ok) {
@@ -21,7 +23,10 @@ function fetchWeatherData(city) {
             }
             return response.json();
         })
-        .then(data => displayCurrentWeather(data))
+        .then(data => {
+            console.log('Current weather data:', data);
+            displayCurrentWeather(data);
+        })
         .catch(error => console.error('Error fetching current weather:', error));
     
     fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`)
@@ -31,7 +36,10 @@ function fetchWeatherData(city) {
             }
             return response.json();
         })
-        .then(data => displayForecast(data))
+        .then(data => {
+            console.log('Forecast data:', data);
+            displayForecast(data);
+        })
         .catch(error => console.error('Error fetching forecast:', error));
 }
 
@@ -62,24 +70,32 @@ function displayForecast(data) {
         return;
     }
 
+    console.log('Full forecast data:', data);
+
     const forecastInfo = document.getElementById('forecast-info');
     let forecastItems = '';
 
-    data.list.forEach((forecast, index) => {
-        if (new Date(forecast.dt * 1000).getHours() === 12) {
-            const forecastItem = `
-                <div class="weather-item">
-                    <div>
-                        <p>Date: ${new Date(forecast.dt * 1000).toLocaleDateString()}</p>
-                        <img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" alt="${forecast.weather[0].description}">
-                        <p>Temperature: ${forecast.main.temp} °F</p>
-                        <p>Humidity: ${forecast.main.humidity} %</p>
-                        <p>Wind Speed: ${forecast.wind.speed} mph</p>
-                    </div>
+    // Filter the data to get the weather at noon for each of the next 5 days
+    const forecastAtNoon = data.list.filter(forecast => new Date(forecast.dt * 1000).getHours() === 12);
+    console.log('Filtered forecast data at noon:', forecastAtNoon);
+
+    // Take only the first 5 entries
+    const nextFiveDaysForecast = forecastAtNoon.slice(0, 5);
+    console.log('Next five days forecast:', nextFiveDaysForecast);
+
+    nextFiveDaysForecast.forEach(forecast => {
+        const forecastItem = `
+            <div class="weather-item">
+                <div>
+                    <p>Date: ${new Date(forecast.dt * 1000).toLocaleDateString()}</p>
+                    <img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" alt="${forecast.weather[0].description}">
+                    <p>Temperature: ${forecast.main.temp} °F</p>
+                    <p>Humidity: ${forecast.main.humidity} %</p>
+                    <p>Wind Speed: ${forecast.wind.speed} mph</p>
                 </div>
-            `;
-            forecastItems += forecastItem;
-        }
+            </div>
+        `;
+        forecastItems += forecastItem;
     });
 
     forecastInfo.innerHTML = forecastItems;
